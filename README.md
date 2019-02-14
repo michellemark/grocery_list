@@ -7,9 +7,10 @@ python terminal_based_grocery_list.py
 
 This program will allow you to continue adding new items to list until you enter q or quit to exit the program.
 All additional menu options are not case sensitive and include:
-  S Show the grocery list by department
-  A to Show the grocery list alphabetically by item names
-  W to Write the list to a file, (always by department)
-  H or Help will show this menu again
-  Q or Quit will end the program
+
+    S Show the grocery list by department
+    A to Show the grocery list alphabetically by item names
+    W to Write the list to a file, (always by department)
+    H or Help will show this menu again
+    Q or Quit will end the program
     
