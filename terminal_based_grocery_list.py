@@ -2,7 +2,7 @@ import datetime
 import operator
 import os
 
-EMPTY_LIST_MESSAGE = "\nNothing to show yet, add something to the list.\n"
+EMPTY_LIST_MESSAGE = "\nNothing to do yet, add some items to the list.\n"
 grocery_list = []
 
 
@@ -59,7 +59,7 @@ def get_list(first_key, second_key=None):
             grocery_list.sort(key=operator.attrgetter(first_key, second_key))
         else:
             grocery_list.sort(key=operator.attrgetter(first_key))
-            
+
         today = datetime.datetime.today()
         return_list += ("-" * 80)
         return_list += f"\nGrocery List for {today:%B %d, %Y}:\n"
@@ -95,11 +95,15 @@ def print_list_by_department():
 
 def write_to_file():
     file_list = get_list(first_key="department", second_key="item")
-    today = datetime.datetime.today()
-    file_name = f"grocery_list_{today:%Y-%m-%d}.txt"
 
-    with open(file_name, "w+") as grocery_file:
-        grocery_file.write(file_list)
+    if len(file_list) > 0:
+        today = datetime.datetime.today()
+        file_name = f"grocery_list_{today:%Y-%m-%d}.txt"
+
+        with open(file_name, "w+") as grocery_file:
+            grocery_file.write(file_list)
+    else:
+        print(EMPTY_LIST_MESSAGE)
 
 
 def add_to_list(new_item):
