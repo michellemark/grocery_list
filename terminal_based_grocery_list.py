@@ -59,6 +59,7 @@ def get_list(first_key, second_key=None):
             grocery_list.sort(key=operator.attrgetter(first_key, second_key))
         else:
             grocery_list.sort(key=operator.attrgetter(first_key))
+            
         today = datetime.datetime.today()
         return_list += ("-" * 80)
         return_list += f"\nGrocery List for {today:%B %d, %Y}:\n"
