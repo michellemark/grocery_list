@@ -3,6 +3,8 @@ import operator
 import os
 
 EMPTY_LIST_MESSAGE = "\nNothing to do yet, add some items to the list.\n"
+ITEM = "item"
+DEPT = "department"
 grocery_list = []
 
 
@@ -50,8 +52,8 @@ def print_menu():
     print("-" * 80)
 
 
-def get_list(first_key, second_key=None):
-    return_list = ""
+def print_list(first_key, second_key=None):
+    clear_screen()
 
     if len(grocery_list) > 0:
 
@@ -61,47 +63,44 @@ def get_list(first_key, second_key=None):
             grocery_list.sort(key=operator.attrgetter(first_key))
 
         today = datetime.datetime.today()
-        return_list += ("-" * 80)
-        return_list += f"\nGrocery List for {today:%B %d, %Y}:\n"
-        return_list += ("-" * 80)
+        print("-" * 80)
+        print(f"Grocery List for {today:%B %d, %Y}:")
+        print("-" * 80)
 
         for index, grocery_item in enumerate(grocery_list, start=1):
-            return_list += f"\n{index}) {grocery_item.item} in {grocery_item.department}"
+           print(f"\n{index}) {grocery_item.item} in {grocery_item.department}")
 
-        return_list += "\n"
-        return_list += ("-" * 80)
-        return_list += "\n"
-
-    return return_list
-
-
-def print_list(first_key, second_key=None):
-    clear_screen()
-    print_list = get_list(first_key, second_key)
-
-    if len(print_list) > 0:
-        print(print_list)
+        print("-" * 80)
+        print("\n")
     else:
         print(EMPTY_LIST_MESSAGE)
 
 
-def print_list_by_item():
-    print_list(first_key="item")
-
-
-def print_list_by_department():
-    print_list(first_key="department", second_key="item")
-
-
 def write_to_file():
-    file_list = get_list(first_key="department", second_key="item")
 
-    if len(file_list) > 0:
+    if len(grocery_list) > 0:
+        grocery_list.sort(key=operator.attrgetter(DEPT, ITEM))
         today = datetime.datetime.today()
         file_name = f"grocery_list_{today:%Y-%m-%d}.txt"
 
         with open(file_name, "w+") as grocery_file:
-            grocery_file.write(file_list)
+            grocery_file.write("-" * 80 + "\n")
+            grocery_file.write(f"Grocery List for {today:%B %d, %Y}:\n")
+            grocery_file.write("-" * 80 + "\n")
+            current_dept = None
+
+            for grocery_item in grocery_list:
+
+                if grocery_item.department != current_dept:
+                    current_dept = grocery_item.department
+
+                    if not current_dept:
+                        current_dept = "No Department Specified"
+
+                    grocery_file.write(f"\n{current_dept.title()}\n")
+                    grocery_file.write("-" * 40 + "\n")
+
+                grocery_file.write(f"{grocery_item.item} [    ]\n")
     else:
         print(EMPTY_LIST_MESSAGE)
 
@@ -109,9 +108,9 @@ def write_to_file():
 def add_to_list(new_item):
 
     if len(new_item) > 0:
-        department = input("What department is that in?: ")
-        department = department.lower()
-        grocery_list.append(GroceryItem(item=new_item, department=department))
+        new_depart = input("What department is that in?: ")
+        new_depart = new_depart.lower()
+        grocery_list.append(GroceryItem(item=new_item, department=new_depart))
     else:
         print("You forgot to enter a new item for the list, try again.")
 
@@ -129,9 +128,9 @@ if __name__ == "__main__":
         elif next_item in ["h", "help"]:
             print_menu()
         elif next_item == "a":
-            print_list_by_item()
+            print_list(first_key=ITEM)
         elif next_item == "s":
-            print_list_by_department()
+            print_list(first_key=DEPT, second_key=ITEM)
         elif next_item == "w":
             write_to_file()
         else:
