@@ -1,0 +1,14 @@
+venv/
+sitemap.xml
+*.log
+sitemap.xml.gz
+*.o
+*.so
+*.pyc
+*~
+.idea/
+.*.sw*
+*-settings.py
+run/gunicorn.sock
+*/migrations/
+docs/
