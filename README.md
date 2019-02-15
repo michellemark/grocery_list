@@ -14,3 +14,5 @@ All additional menu options are not case sensitive and include:
     H or Help will show this menu again
     Q or Quit will end the program
     
+For the simple HTML form version, open grocery_list_form.html in a web browser by either double clicking the file or right clicking and choosing to open with an installed browser.   
+    

@@ -12,3 +12,4 @@ sitemap.xml.gz
 run/gunicorn.sock
 */migrations/
 docs/
+*.txt
