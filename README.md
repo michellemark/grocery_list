@@ -1,5 +1,5 @@
 # grocery_list
-playing around with various ways to do a grocery list for fun and learning
+playing around with various ways to do a grocery list for fun and mentoring projects.
 
 For the terminal based grocery list, be sure to have python 3.6 installed first https://www.python.org/downloads/.  Assuming that running the command python opens a python 3.6.x shell then run the terminal based program with the command:
 
