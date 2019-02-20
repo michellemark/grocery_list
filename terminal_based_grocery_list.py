@@ -64,7 +64,9 @@ def print_list(first_key, second_key=None):
 
         today = datetime.datetime.today()
         print("-" * 80)
-        print(f"Grocery List for {today:%B %d, %Y}:")
+        print(
+            f"Grocery List for {today:%B %d, %Y}:"
+        )
         print("-" * 80)
 
         for index, grocery_item in enumerate(grocery_list, start=1):
@@ -110,7 +112,9 @@ def add_to_list(new_item):
     if len(new_item) > 0:
         new_depart = input("What department is that in?: ")
         new_depart = new_depart.lower()
-        grocery_list.append(GroceryItem(item=new_item, department=new_depart))
+        grocery_list.append(
+            GroceryItem(item=new_item, department=new_depart)
+        )
     else:
         print("You forgot to enter a new item for the list, try again.")
 

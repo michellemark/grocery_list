@@ -70,23 +70,31 @@ var list_processor = ( function() {
 
     }
 
+    function validate_input(text_input) {
+        var is_valid = false;
+
+        if (text_input.val().length >= 1) {
+            is_valid = true;
+            text_input.removeClass("is-invalid");
+            text_input.addClass("is-valid");
+        }
+        else {
+            text_input.removeClass("is-valid");
+            text_input.addClass("is-invalid");
+        }
+
+        return is_valid;
+    }
+
     return {
         setup_page: function () {
             item_entry.on("keyup", function () {
-
-                if (item_entry.val().length > 1) {
-                    item_entry.removeClass("is-invalid");
-                    item_entry.addClass("is-valid");
-                }
-                else {
-                    item_entry.removeClass("is-valid");
-                    item_entry.addClass("is-invalid");
-                }
-
+                validate_input($(this));
             });
             save_new_btn.on("click", function () {
+                var is_valid = validate_input(item_entry);
 
-                if (item_entry.val().length > 1) {
+                if (is_valid) {
                     var new_item = item_entry.val();
                     new_item = clean_user_input(new_item);
                     var dept = department_selection.val();
@@ -97,39 +105,23 @@ var list_processor = ( function() {
                     });
                     print_grocery_list();
                 }
-                else {
-                    item_entry.removeClass("is-valid");
-                    item_entry.addClass("is-invalid");
-                }
 
             });
             reset_list_btn.on("click", function () {
                 display_list.empty();
                 display_list.append("Nothing in the list, add some items!");
             });
-            new_department.on("keyup", function () {
-
-                if (new_department.val().length > 1) {
-                    new_department.removeClass("is-invalid");
-                    new_department.addClass("is-valid");
-                }
-                else {
-                    new_department.removeClass("is-valid");
-                    new_department.addClass("is-invalid");
-                }
-
+            new_department.on("keyup", function() {
+                validate_input($(this));
             });
             add_department_btn.on("click", function () {
+                var is_valid = validate_input(new_department);
 
-                if (new_department.val().length > 0) {
+                if (is_valid) {
                     var new_item = new_department.val();
                     new_item = clean_user_input(new_item);
                     departments.push(new_item);
                     load_department_selections();
-                }
-                else {
-                    new_department.removeClass("is-valid");
-                    new_department.addClass("is-invalid");
                 }
 
             });
