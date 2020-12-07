@@ -6,6 +6,7 @@ EMPTY_LIST_MESSAGE = "\nNothing to do yet, add some items to the list.\n"
 ITEM = "item"
 DEPT = "department"
 grocery_list = []
+run_date = datetime.datetime.today()
 
 
 class GroceryItem:
@@ -33,6 +34,12 @@ class GroceryItem:
     def __le__(self, other):
         return (self.department, self.item) < (other.department, other.item) or (
                 self.item == other.item and self.department == other.department)
+
+    def get_item(self):
+        return self.item
+
+    def get_department(self):
+        return self.department
 
 
 def clear_screen():
@@ -62,10 +69,9 @@ def print_list(first_key, second_key=None):
         else:
             grocery_list.sort(key=operator.attrgetter(first_key))
 
-        today = datetime.datetime.today()
         print("-" * 80)
         print(
-            f"Grocery List for {today:%B %d, %Y}:"
+            f"Grocery List for {run_date:%B %d, %Y}:"
         )
         print("-" * 80)
 
@@ -82,12 +88,11 @@ def write_to_file():
 
     if len(grocery_list) > 0:
         grocery_list.sort(key=operator.attrgetter(DEPT, ITEM))
-        today = datetime.datetime.today()
-        file_name = f"grocery_list_{today:%Y-%m-%d}.txt"
+        file_name = f"grocery_list_{run_date:%Y-%m-%d}.txt"
 
         with open(file_name, "w+") as grocery_file:
             grocery_file.write("-" * 80 + "\n")
-            grocery_file.write(f"Grocery List for {today:%B %d, %Y}:\n")
+            grocery_file.write(f"Grocery List for {run_date:%B %d, %Y}:\n")
             grocery_file.write("-" * 80 + "\n")
             current_dept = None
 
