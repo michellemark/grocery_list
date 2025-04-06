@@ -182,8 +182,7 @@ var list_processor = (function () {
         setTimeout(function () {
             printWindow.focus();
             printWindow.print();
-            // Uncomment the line below when you're satisfied with the output
-            // printWindow.close();
+            printWindow.close();
         }, 500);
     }
 
