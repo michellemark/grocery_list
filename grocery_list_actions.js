@@ -13,7 +13,7 @@ var list_processor = (function () {
     var reset_list_btn = $("#reset_list_btn");
     var new_department = $("#new_department");
     var add_department_btn = $("#add_department_btn");
-    var print_list_btn = $("#print_list_btn"); // Reference the existing print button
+    var print_list_btn = $("#print_list_btn");
 
     function clean_user_input(value) {
         value = value.replace(/[^a-zA-Z0-9\s\/\-_]/, "");
@@ -44,7 +44,7 @@ var list_processor = (function () {
     // Remove an item from the grocery list
     function remove_item(index) {
         grocery_list.splice(index, 1);
-        display_grocery_list(); // Updated function name
+        display_grocery_list();
     }
 
     // Renamed from print_grocery_list to display_grocery_list
@@ -199,7 +199,6 @@ var list_processor = (function () {
     };
 }(list_processor || {}));
 
-// jQuery ready syntax
 $(function () {
     list_processor.setup_page();
 });
