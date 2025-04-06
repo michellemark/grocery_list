@@ -41,13 +41,11 @@ var list_processor = (function () {
         }
     }
 
-    // Remove an item from the grocery list
     function remove_item(index) {
         grocery_list.splice(index, 1);
         display_grocery_list();
     }
 
-    // Renamed from print_grocery_list to display_grocery_list
     function display_grocery_list() {
         display_list.empty();
 
@@ -74,8 +72,6 @@ var list_processor = (function () {
 
                 display_list.append("<h4 class='mt-4'>" + current_department + "</h4>");
             }
-
-            // Add item with checkbox for print and trash icon for screen
             display_list.append(
                 "<div class='d-flex align-items-center'>" +
                 "<div class='checkbox-container'>" +
@@ -89,27 +85,106 @@ var list_processor = (function () {
             );
         }
 
-        // Set up delete button handlers
         $(".delete-item").on("click", function () {
             var index = $(this).data("index");
             remove_item(index);
         });
     }
 
-    // New function to handle printing only the grocery list
     function print_only_list() {
         if (grocery_list.length === 0) {
             alert("Nothing to print. Add some items to your grocery list first.");
             return;
         }
 
-        $("#display_list .d-flex").each(function () {
-            if ($(this).find('.checkbox-print').length === 0) {
-                $(this).prepend('<div class="checkbox-print"></div>');
+        // Create a new window for printing
+        var printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write('<html><head><title>Grocery List</title>');
+
+        // Add styling
+        printWindow.document.write(`
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                padding: 20px; 
+                margin: 0; 
             }
+            h2 { 
+                margin-top: 0; 
+                margin-bottom: 20px; 
+            }
+            h4 { 
+                margin-top: 15px; 
+                margin-bottom: 5px; 
+                font-size: 18px; 
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 5px;
+            }
+            .list-item { 
+                display: flex; 
+                align-items: center; 
+                margin-bottom: 8px; 
+            }
+            .checkbox { 
+                display: inline-block; 
+                width: 16px; 
+                height: 16px; 
+                border: 1px solid #000; 
+                margin-right: 10px; 
+            }
+            .department { 
+                margin-top: 15px; 
+            }
+        </style>
+    `);
+
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h2>Grocery List</h2>');
+
+        // Sort the grocery list by department and then by item name
+        var sortedList = [...grocery_list].sort(function (a, b) {
+            return a.department.localeCompare(b.department) || a.item.localeCompare(b.item);
         });
 
-        window.print();
+        // Group items by department
+        var departmentGroups = {};
+
+        sortedList.forEach(function (item) {
+            var dept = item.department || "No Department Specified";
+            if (!departmentGroups[dept]) {
+                departmentGroups[dept] = [];
+            }
+            departmentGroups[dept].push(item.item);
+        });
+
+        var printContent = '<div id="print_content">';
+        var deptNames = Object.keys(departmentGroups).sort();
+
+        // Add each department and its items
+        deptNames.forEach(function (dept) {
+            printContent += '<div class="department">';
+            printContent += '<h4>' + dept + '</h4>';
+
+            departmentGroups[dept].forEach(function (item) {
+                printContent += '<div class="list-item"><div class="checkbox"></div>' + item + '</div>';
+            });
+
+            printContent += '</div>';
+        });
+
+        printContent += '</div>';
+
+        printWindow.document.write(printContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+
+        // Wait for content to load
+        setTimeout(function () {
+            printWindow.focus();
+            printWindow.print();
+            // Uncomment the line below when you're satisfied with the output
+            // printWindow.close();
+        }, 500);
     }
 
     function validate_input(text_input) {

@@ -11,72 +11,7 @@
           rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
           crossorigin="anonymous">
-    <style type="text/css">
-        @media print {
-            #form-wrapper,
-            button,
-            input,
-            select,
-            label,
-            #instructions,
-            footer {
-                display: none !important;
-            }
-            .container h2 {
-                visibility: visible !important;
-                position: relative;
-                margin-top: 0;
-                padding-top: 0;
-            }
-            body {
-                padding: 0;
-                margin: 0;
-            }
-            body * {
-                visibility: hidden;
-            }
-            #display_list,
-            #display_list * {
-                visibility: visible !important;
-            }
-            .container:nth-child(2) {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            html, body {
-                width: 100%;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            #wpadminbar, header, nav {
-                display: none !important;
-            }
-            h4 {
-                page-break-after: avoid;
-            }
-            .d-flex {
-                page-break-inside: avoid;
-            }
-            .delete-item {
-                display: none !important;
-            }
-            .checkbox-print {
-                display: inline-block !important;
-                margin-right: 10px;
-                height: 16px;
-                width: 16px;
-                border: 1px solid #000;
-            }
-            .checkbox-container {
-                display: flex;
-                align-items: center;
-            }
-        }
-
+    <style>
         @media screen {
             .checkbox-print {
                 display: none;
@@ -85,58 +20,44 @@
     </style>
 </head>
 <body>
-<div id="form-wrapper" class="container">
-    <div class="row">
-        <h1 class="my-4">
-            Grocery List Creator
-        </h1>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="item_entry" class="form-label">
-                Grocery list item <span class="text-danger">*</span>
-            </label>
-            <input id="item_entry" type="text" class="form-control" required>
+<div class="grocery-list-app container">
+    <h2>Grocery List</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="item_entry" class="form-label">New Item</label>
+            <input type="text" class="form-control" id="item_entry" placeholder="Enter item name">
         </div>
-        <div class="col">
-            <label for="department_selection" class="form-label">
-                Which department is it in?
-            </label>
-            <select id="department_selection" class="form-select"></select>
+        <div class="col-md-6">
+            <label for="department_selection" class="form-label">Department</label>
+            <select class="form-select" id="department_selection"></select>
         </div>
     </div>
-    <div class="row">
-        <div class="col p-4 d-block text-center">
-            <button type="submit" id="save_new_btn" class="btn btn-primary mx-auto">
-                Save to List
-            </button>
-            <button type="reset" id="reset_list_btn" class="btn btn-warning mx-3">
-                Reset List
-            </button>
-            <button type="button" id="print_list_btn" class="btn btn-success mx-auto">
-                Print List
-            </button>
+
+    <div class="mb-3">
+        <button id="save_new_btn" class="btn btn-primary">Add Item</button>
+        <button id="reset_list_btn" class="btn btn-danger">Reset List</button>
+        <button id="print_list_btn" class="btn btn-success">Print List</button>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-9">
+            <label for="new_department" class="form-label">New Department</label>
+            <input type="text" class="form-control" id="new_department" placeholder="Enter new department name">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button id="add_department_btn" class="btn btn-secondary w-100">Add Department</button>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <label for="new_department" class="form-label">
-                New department name:
-            </label>
-            <div class="input-group">
-                <input id="new_department" type="text" name="new_department" class="form-control">
-                <button id="add_department_btn" class="btn btn-info">
-                    Add to Departments
-                </button>
-            </div>
+
+    <div class="card">
+        <div class="card-header bg-light">
+            <h3 class="mb-0">Your Grocery List</h3>
+        </div>
+        <div class="card-body">
+            <div id="display_list"></div>
         </div>
     </div>
-</div>
-<div class="container">
-    <h2 class="border-bottom border-dark my-3">
-        Grocery List
-    </h2>
-    <div id="display_list" class="p-3"></div>
 </div>
 <footer id="instructions" class="my-5 p-4">
     Add to your grocery list until your heart is content you have thought of everything. If you select a
