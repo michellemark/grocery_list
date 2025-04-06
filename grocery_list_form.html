@@ -13,31 +13,95 @@
           crossorigin="anonymous">
     <style type="text/css">
         @media print {
-            body {
-                margin: 100px 50px;
-            }
-
+            /* Hide unnecessary elements */
             #form-wrapper,
-            #instructions {
+            button,
+            input,
+            select,
+            label,
+            #instructions,
+            footer {
+                display: none !important;
+            }
+
+            /* Show the grocery list heading */
+            .container h2 {
+                visibility: visible !important;
+                position: relative;
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            /* Reset spacing for print */
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Hide everything by default */
+            body * {
+                visibility: hidden;
+            }
+
+            /* Make only the list container and its children visible */
+            #display_list,
+            #display_list * {
+                visibility: visible !important;
+            }
+
+            /* Position the list section at top-left of the page */
+            .container:nth-child(2) {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Ensure the list takes up the full width */
+            html, body {
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Reset any fixed positions that might affect printing */
+            #wpadminbar, header, nav {
+                display: none !important;
+            }
+
+            /* Add page break control */
+            h4 {
+                page-break-after: avoid;
+            }
+
+            .d-flex {
+                page-break-inside: avoid;
+            }
+
+            /* Checkbox styling for print */
+            .delete-item {
+                display: none !important;
+            }
+
+            .checkbox-print {
+                display: inline-block !important;
+                margin-right: 10px;
+                height: 16px;
+                width: 16px;
+                border: 1px solid #000;
+            }
+
+            .checkbox-container {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        @media screen {
+            .checkbox-print {
                 display: none;
-            }
-
-            #grocery_list,
-            #grocery_list h2,
-            #display_list {
-                background-color: white !important;
-                color: black !important;
-                font-size: 16pt !important;
-            }
-
-            #grocery_list h2 {
-                font-size: 22pt !important;
-                font-weight: bold;
-            }
-
-            #grocery_list h4 {
-                font-size: 20pt !important;
-                font-weight: bold;
             }
         }
     </style>

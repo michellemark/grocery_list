@@ -15,26 +15,6 @@ var list_processor = (function () {
     var add_department_btn = $("#add_department_btn");
     var print_list_btn = $("#print_list_btn"); // Reference the existing print button
 
-    // Add print CSS rules
-    function add_print_styles() {
-        // Check if our style is already added
-        if ($('#print-style-custom').length === 0) {
-            $('head').append(
-                '<style id="print-style-custom" type="text/css">' +
-                '@media print {' +
-                '  .delete-item { display: none !important; }' +
-                '  .checkbox-print { display: inline-block !important; margin-right: 10px; }' +
-                '  .checkbox-container { display: flex; align-items: center; }' +
-                '  .checkbox-print { height: 16px; width: 16px; border: 1px solid #000; }' +
-                '}' +
-                '@media screen {' +
-                '  .checkbox-print { display: none; }' +
-                '}' +
-                '</style>'
-            );
-        }
-    }
-
     function clean_user_input(value) {
         value = value.replace(/[^a-zA-Z0-9\s\/\-_]/, "");
 
@@ -123,7 +103,12 @@ var list_processor = (function () {
             return;
         }
 
-        // Use the browser's print function
+        $("#display_list .d-flex").each(function () {
+            if ($(this).find('.checkbox-print').length === 0) {
+                $(this).prepend('<div class="checkbox-print"></div>');
+            }
+        });
+
         window.print();
     }
 
@@ -144,9 +129,6 @@ var list_processor = (function () {
 
     return {
         setup_page: function () {
-            // Add print styles at initialization
-            add_print_styles();
-
             item_entry.on("keyup", function () {
                 validate_input($(this));
             });
@@ -172,7 +154,7 @@ var list_processor = (function () {
             });
 
             reset_list_btn.on("click", function () {
-                grocery_list = []; // Empty the grocery list array
+                grocery_list = [];
                 display_list.empty();
                 display_list.append("Nothing in the list, add some items!");
                 item_entry.val('');
@@ -201,13 +183,11 @@ var list_processor = (function () {
                         new_department.val('');
                         new_department.removeClass('is-valid');
                     } else {
-                        // Alert user if department already exists
                         alert("This department already exists!");
                     }
                 }
             });
 
-            // Set up the print button click handler
             print_list_btn.on("click", function () {
                 print_only_list();
             });
