@@ -1,6 +1,9 @@
 import datetime
 import operator
 import os
+from dataclasses import dataclass
+from functools import total_ordering
+from typing import Optional
 
 EMPTY_LIST_MESSAGE = "\nNothing to do yet, add some items to the list.\n"
 ITEM = "item"
@@ -9,31 +12,17 @@ grocery_list = []
 run_date = datetime.datetime.today()
 
 
+@dataclass
+@total_ordering
 class GroceryItem:
-
-    def __init__(self, item, department):
-        self.item = item
-        self.department = department
-
-    def __eq__(self, other):
-        return self.item == other.item and self.department == other.department
-
-    def __ne__(self, other):
-        return self.item != other.item or self.department != other.department
-
-    def __gt__(self, other):
-        return (self.department, self.item) > (other.department, other.item)
+    item: str
+    department: str
 
     def __lt__(self, other):
         return (self.department, self.item) < (other.department, other.item)
 
-    def __ge__(self, other):
-        return (self.department, self.item) > (other.department, other.item) or (
-                    self.item == other.item and self.department == other.department)
-
-    def __le__(self, other):
-        return (self.department, self.item) < (other.department, other.item) or (
-                self.item == other.item and self.department == other.department)
+    def __eq__(self, other):
+        return self.item == other.item and self.department == other.department
 
     def get_item(self):
         return self.item
@@ -42,11 +31,11 @@ class GroceryItem:
         return self.department
 
 
-def clear_screen():
+def clear_screen() -> None:
     os.system("cls" if os.name == "nt" else "clear")
 
 
-def print_menu():
+def print_menu() -> None:
     clear_screen()
     print("-" * 80)
     print("Let's make a Grocery List! :)\n"
@@ -59,7 +48,7 @@ def print_menu():
     print("-" * 80)
 
 
-def print_list(first_key, second_key=None):
+def print_list(first_key: str, second_key: Optional[str] = None) -> None:
     clear_screen()
 
     if len(grocery_list) > 0:
@@ -84,35 +73,40 @@ def print_list(first_key, second_key=None):
         print(EMPTY_LIST_MESSAGE)
 
 
-def write_to_file():
+def write_to_file() -> None:
 
     if len(grocery_list) > 0:
-        grocery_list.sort(key=operator.attrgetter(DEPT, ITEM))
-        file_name = f"grocery_list_{run_date:%Y-%m-%d}.txt"
 
-        with open(file_name, "w+") as grocery_file:
-            grocery_file.write("-" * 80 + "\n")
-            grocery_file.write(f"Grocery List for {run_date:%B %d, %Y}:\n")
-            grocery_file.write("-" * 80 + "\n")
-            current_dept = None
+        try:
+            grocery_list.sort(key=operator.attrgetter(DEPT, ITEM))
+            file_name = f"grocery_list_{run_date:%Y-%m-%d}.txt"
 
-            for grocery_item in grocery_list:
+            with open(file_name, "w+") as grocery_file:
+                grocery_file.write("-" * 80 + "\n")
+                grocery_file.write(f"Grocery List for {run_date:%B %d, %Y}:\n")
+                grocery_file.write("-" * 80 + "\n")
+                current_dept = None
 
-                if grocery_item.department != current_dept:
-                    current_dept = grocery_item.department
+                for grocery_item in grocery_list:
 
-                    if not current_dept:
-                        current_dept = "No Department Specified"
+                    if grocery_item.department != current_dept:
+                        current_dept = grocery_item.department
 
-                    grocery_file.write(f"\n{current_dept.title()}\n")
-                    grocery_file.write("-" * 40 + "\n")
+                        if not current_dept:
+                            current_dept = "No Department Specified"
 
-                grocery_file.write(f"{grocery_item.item} [    ]\n")
+                        grocery_file.write(f"\n{current_dept.title()}\n")
+                        grocery_file.write("-" * 40 + "\n")
+
+                    grocery_file.write(f"{grocery_item.item} [    ]\n")
+        except IOError as e:
+            print(f"Error writing file: {e}")
+
     else:
         print(EMPTY_LIST_MESSAGE)
 
 
-def add_to_list(new_item):
+def add_to_list(new_item: str) -> None:
 
     if len(new_item) > 0:
         new_depart = input("What department is that in?: ")
@@ -144,6 +138,3 @@ if __name__ == "__main__":
             write_to_file()
         else:
             add_to_list(new_item=next_item)
-
-
-
