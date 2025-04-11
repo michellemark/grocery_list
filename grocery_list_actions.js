@@ -14,6 +14,8 @@ var list_processor = (function () {
     var new_department = $("#new_department");
     var add_department_btn = $("#add_department_btn");
     var print_list_btn = $("#print_list_btn");
+    var copy_list_btn = $("#copy_list_btn");
+
 
     function clean_user_input(value) {
         value = value.replace(/[^a-zA-Z0-9\s\/\-_]/, "");
@@ -79,7 +81,7 @@ var list_processor = (function () {
                 "<span class='ps-3 flex-grow-1'>" + next_item.item + "</span>" +
                 "</div>" +
                 "<button class='btn btn-sm text-danger delete-item' data-index='" + i + "'>" +
-                "<i class='fa fa-trash'></i>🗑️" +
+                "<i class='bi bi-trash'></i>" +
                 "</button>" +
                 "</div>"
             );
@@ -201,6 +203,60 @@ var list_processor = (function () {
         return is_valid;
     }
 
+    function format_list_for_clipboard() {
+        var formatted_text = "Nothing in the list, add some items!";
+
+        if (grocery_list.length !== 0) {
+            var sorted_list = [...grocery_list].sort(function (a, b) {
+                return a.department.localeCompare(b.department) || a.item.localeCompare(b.item);
+            });
+
+            formatted_text = "GROCERY LIST\n";
+            var current_department = null;
+
+            for (var i = 0; i < sorted_list.length; i++) {
+                var next_item = sorted_list[i];
+
+                if (next_item.department !== current_department) {
+                    if (next_item.department) {
+                        current_department = next_item.department;
+                    } else {
+                        current_department = "No Department Specified";
+                    }
+
+                    formatted_text += "\n" + current_department + ":\n";
+                }
+
+                formatted_text += "□ " + next_item.item + "\n";
+            }
+        }
+
+        return formatted_text;
+    }
+
+    function copy_to_clipboard() {
+        var success = false;
+
+        if (grocery_list.length !== 0) {
+            var text_to_copy = format_list_for_clipboard();
+            navigator.clipboard.writeText(text_to_copy)
+                .then(function () {
+                    alert("Your grocery list has been copied to clipboard!  Next, go paste it into the app of your choice.");
+                    success = true;
+                })
+                .catch(function (err) {
+                    console.error('Could not copy text: ', err);
+                    alert("Failed to copy to clipboard. Your browser may not support this feature. " +
+                        "Try using a different browser or copy the text manually from the list below and " +
+                        "paste it into the app of your choice.");
+                });
+        } else {
+            alert("Nothing to copy. Add some items to your grocery list first.");
+        }
+
+        return success;
+    }
+
     return {
         setup_page: function () {
             item_entry.on("keyup", function () {
@@ -264,6 +320,10 @@ var list_processor = (function () {
 
             print_list_btn.on("click", function () {
                 print_only_list();
+            });
+
+            copy_list_btn.on("click", function () {
+                copy_to_clipboard();
             });
 
             // Initialize page
