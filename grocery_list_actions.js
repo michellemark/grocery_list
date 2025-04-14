@@ -227,7 +227,7 @@ var list_processor = (function () {
                     formatted_text += "\n" + current_department + ":\n";
                 }
 
-                formatted_text += "□ " + next_item.item + "\n";
+                formatted_text += "- " + next_item.item + "\n";
             }
         }
 
